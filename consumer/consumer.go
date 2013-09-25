@@ -44,10 +44,30 @@ func (c *Consumer) ConnectToLookupd(addr string) error {
 	return nil
 }
 
+// Connects all readers to NSQ lookupd instances
+func (c *Consumer) ConnectToLookupds(addrs []string) error {
+	for _, addr := range addrs {
+		if err := c.ConnectToLookupd(addr); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 // Connects all readers to NSQ
 func (c *Consumer) ConnectToNSQ(addr string) error {
 	for _, q := range c.Handlers {
 		if err := q.ConnectToNSQ(addr); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Connects all readers to NSQ instances
+func (c *Consumer) ConnectToNSQs(addrs []string) error {
+	for _, addr := range addrs {
+		if err := c.ConnectToNSQ(addr); err != nil {
 			return err
 		}
 	}
