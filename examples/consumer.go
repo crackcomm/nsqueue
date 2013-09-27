@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/crackcomm/nsqueue/consumer"
+	"log"
 )
 
 var (
