@@ -14,6 +14,14 @@ func ConnectToNSQ(addr string) error {
 	return DefaultConsumer.ConnectToNSQ(addr)
 }
 
+func ConnectToLookupds(addrs []string) error {
+	return DefaultConsumer.ConnectToLookupds(addrs)
+}
+
+func ConnectToNSQs(addrs []string) error {
+	return DefaultConsumer.ConnectToNSQs(addrs)
+}
+
 func Start(debug bool) {
 	DefaultConsumer.Start(debug)
 }
