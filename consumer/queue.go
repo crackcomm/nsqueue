@@ -4,11 +4,11 @@ import (
 	"github.com/bitly/go-nsq"
 )
 
-type Queue struct {
-	Handler func(*Message)
+type queue struct {
+	handler func(*Message)
 	*nsq.Reader
 }
 
-func (q *Queue) HandleMessage(message *nsq.Message, responseChannel chan *nsq.FinishedMessage) {
-	go q.Handler(&Message{responseChannel, message})
+func (q *queue) HandleMessage(message *nsq.Message, responseChannel chan *nsq.FinishedMessage) {
+	go q.handler(&Message{responseChannel, message})
 }

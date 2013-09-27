@@ -11,11 +11,11 @@ type topicChan struct {
 }
 
 type Consumer struct {
-	Handlers map[topicChan]*Queue
+	Handlers map[topicChan]*queue
 }
 
 func NewConsumer() *Consumer {
-	return &Consumer{Handlers: make(map[topicChan]*Queue)}
+	return &Consumer{Handlers: make(map[topicChan]*queue)}
 }
 
 // Registers topic/channel handler for messages
@@ -28,7 +28,7 @@ func (c *Consumer) Register(topic, channel string, maxInFlight int, handler func
 	}
 	r.SetMaxInFlight(maxInFlight)
 
-	q := &Queue{handler, r}
+	q := &queue{handler, r}
 	r.AddAsyncHandler(q)
 	c.Handlers[tch] = q
 	return nil
