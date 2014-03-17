@@ -1,24 +1,26 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"github.com/crackcomm/nsqueue/producer"
+	"time"
 )
 
 var (
-	nsqdAddr = "127.0.0.1:4150"
+	amount   = flag.Int("amount", 20, "Amount of messages to produce every 100 ms")
+	nsqdAddr = flag.String("nsqd", "127.0.0.1:4150", "nsqd tcp address")
 )
 
 func main() {
-	producer.Connect(nsqdAddr)
+	flag.Parse()
+	producer.Connect(*nsqdAddr)
 
-	var crawlJob struct {
-		host string
-	}
-	crawlJob.host = "google.com"
-
-	body, _ := producer.EncJson(crawlJob)
-	for i := 0; i < 10000; i++ {
-		producer.PublishAsync("crawl", body, nil)
-		// producer.PublishJsonAsync("crawl", crawlJob, nil)
+	for _ = range time.NewTicker(100 * time.Millisecond).C {
+		fmt.Println("Ping...")
+		for i := 0; i < *amount; i++ {
+			body, _ := time.Now().MarshalBinary()
+			producer.PublishAsync("latency-test", body, nil)
+		}
 	}
 }
