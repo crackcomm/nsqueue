@@ -10,15 +10,20 @@ type topicChan struct {
 	channel string
 }
 
+// nsq consumer
 type Consumer struct {
 	Handlers map[topicChan]*queue
 }
 
+// Creates a new consumer structure
 func NewConsumer() *Consumer {
-	return &Consumer{Handlers: make(map[topicChan]*queue)}
+	return &Consumer{
+		Handlers: make(map[topicChan]*queue),
+	}
 }
 
 // Registers topic/channel handler for messages
+// This function creates a new nsq.Reader
 func (c *Consumer) Register(topic, channel string, maxInFlight int, handler func(*Message)) error {
 	tch := topicChan{topic, channel}
 	// Create nsq reader
@@ -35,7 +40,7 @@ func (c *Consumer) Register(topic, channel string, maxInFlight int, handler func
 }
 
 // Connects all readers to NSQ lookupd
-func (c *Consumer) ConnectToLookupd(addr string) error {
+func (c *Consumer) ConnectLookupd(addr string) error {
 	for _, q := range c.Handlers {
 		if err := q.ConnectToLookupd(addr); err != nil {
 			return err
@@ -45,9 +50,9 @@ func (c *Consumer) ConnectToLookupd(addr string) error {
 }
 
 // Connects all readers to NSQ lookupd instances
-func (c *Consumer) ConnectToLookupds(addrs []string) error {
+func (c *Consumer) ConnectLookupdList(addrs []string) error {
 	for _, addr := range addrs {
-		if err := c.ConnectToLookupd(addr); err != nil {
+		if err := c.ConnectLookupd(addr); err != nil {
 			return err
 		}
 	}
@@ -55,7 +60,7 @@ func (c *Consumer) ConnectToLookupds(addrs []string) error {
 }
 
 // Connects all readers to NSQ
-func (c *Consumer) ConnectToNSQ(addr string) error {
+func (c *Consumer) Connect(addr string) error {
 	for _, q := range c.Handlers {
 		if err := q.ConnectToNSQ(addr); err != nil {
 			return err
@@ -65,9 +70,9 @@ func (c *Consumer) ConnectToNSQ(addr string) error {
 }
 
 // Connects all readers to NSQ instances
-func (c *Consumer) ConnectToNSQs(addrs []string) error {
+func (c *Consumer) ConnectList(addrs []string) error {
 	for _, addr := range addrs {
-		if err := c.ConnectToNSQ(addr); err != nil {
+		if err := c.Connect(addr); err != nil {
 			return err
 		}
 	}
@@ -81,5 +86,6 @@ func (c *Consumer) Start(debug bool) {
 			log.Printf("Handler: topic=%s channel=%s max=%d\n", i.topic, i.channel, q.MaxInFlight())
 		}
 	}
+
 	<-make(chan bool)
 }

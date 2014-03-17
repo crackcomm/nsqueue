@@ -1,32 +1,27 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"github.com/crackcomm/nsqueue/consumer"
-	"log"
+	"time"
 )
 
 var (
-	lookupdAddr = "127.0.0.1:4161"
+	nsqdAddr    = flag.String("nsqd", "127.0.0.1:4150", "nsqd http address")
+	maxInFlight = flag.Int("max-in-flight", 30, "Maximum amount of messages in flight to consume")
 )
 
-func HandleCrawl(message *consumer.Message) {
-	var crawlMessage struct {
-		Host string
-	}
-
-	err := message.ReadJson(&crawlMessage)
-	if err != nil {
-		log.Printf("Error decoding json msg: %v\n", err)
-		message.GiveUp()
-		return
-	}
-
-	log.Printf("new msg: %s\n", crawlMessage.Host)
-	message.Success()
+func HandleTest(msg *consumer.Message) {
+	t := &time.Time{}
+	t.UnmarshalBinary(msg.Body)
+	fmt.Printf("Consume latency: %s\n", time.Since(*t))
+	msg.Success()
 }
 
 func main() {
-	consumer.Register("crawl", "queue", 2500, HandleCrawl)
-	consumer.ConnectToLookupd(lookupdAddr)
-	consumer.Start(true) // starts to wait
+	flag.Parse()
+	consumer.Register("latency-test", "consume", *maxInFlight, HandleTest)
+	consumer.Connect(*nsqdAddr)
+	consumer.Start(true)
 }
