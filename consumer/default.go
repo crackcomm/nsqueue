@@ -24,8 +24,8 @@ func ConnectLookupdList(addrs []string) error {
 }
 
 // Look for Consumer.Register() (on default consumer)
-func Register(topic, channel string, maxInFlight int, handler func(*Message)) error {
-	return DefaultConsumer.Register(topic, channel, maxInFlight, handler)
+func Register(topic, channel string, maxInFlight int, fnc Handler) error {
+	return DefaultConsumer.Register(topic, channel, maxInFlight, fnc)
 }
 
 // Look for Consumer.Start() (on default consumer)

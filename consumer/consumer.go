@@ -10,7 +10,10 @@ type topicChan struct {
 	channel string
 }
 
-// nsq consumer
+// Function that handles incoming message.
+type Handler func(*Message)
+
+// NSQ messages consumer.
 type Consumer struct {
 	Handlers map[topicChan]*queue
 }
@@ -24,7 +27,7 @@ func NewConsumer() *Consumer {
 
 // Registers topic/channel handler for messages
 // This function creates a new nsq.Reader
-func (c *Consumer) Register(topic, channel string, maxInFlight int, handler func(*Message)) error {
+func (c *Consumer) Register(topic, channel string, maxInFlight int, handler Handler) error {
 	tch := topicChan{topic, channel}
 	// Create nsq reader
 	r, err := nsq.NewReader(topic, channel)

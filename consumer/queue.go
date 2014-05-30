@@ -5,10 +5,10 @@ import (
 )
 
 type queue struct {
-	handler func(*Message)
+	fnc Handler
 	*nsq.Reader
 }
 
 func (q *queue) HandleMessage(message *nsq.Message, responseChannel chan *nsq.FinishedMessage) {
-	go q.handler(&Message{responseChannel, message})
+	go q.fnc(&Message{responseChannel, message})
 }
