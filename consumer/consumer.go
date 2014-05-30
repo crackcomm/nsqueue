@@ -15,13 +15,13 @@ type Handler func(*Message)
 
 // NSQ messages consumer.
 type Consumer struct {
-	Handlers map[topicChan]*queue
+	handlers map[topicChan]*queue
 }
 
 // Creates a new consumer structure
 func NewConsumer() *Consumer {
 	return &Consumer{
-		Handlers: make(map[topicChan]*queue),
+		handlers: make(map[topicChan]*queue),
 	}
 }
 
@@ -38,13 +38,13 @@ func (c *Consumer) Register(topic, channel string, maxInFlight int, handler Hand
 
 	q := &queue{handler, r}
 	r.AddAsyncHandler(q)
-	c.Handlers[tch] = q
+	c.handlers[tch] = q
 	return nil
 }
 
 // Connects all readers to NSQ lookupd
 func (c *Consumer) ConnectLookupd(addr string) error {
-	for _, q := range c.Handlers {
+	for _, q := range c.handlers {
 		if err := q.ConnectToLookupd(addr); err != nil {
 			return err
 		}
@@ -64,7 +64,7 @@ func (c *Consumer) ConnectLookupdList(addrs []string) error {
 
 // Connects all readers to NSQ
 func (c *Consumer) Connect(addr string) error {
-	for _, q := range c.Handlers {
+	for _, q := range c.handlers {
 		if err := q.ConnectToNSQ(addr); err != nil {
 			return err
 		}
@@ -85,7 +85,7 @@ func (c *Consumer) ConnectList(addrs []string) error {
 // Just waits
 func (c *Consumer) Start(debug bool) {
 	if debug {
-		for i, q := range c.Handlers {
+		for i, q := range c.handlers {
 			log.Printf("Handler: topic=%s channel=%s max=%d\n", i.topic, i.channel, q.MaxInFlight())
 		}
 	}
