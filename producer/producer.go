@@ -13,7 +13,7 @@ type Producer struct {
 
 // PublishJSONAsync - sends message to nsq  topic in json format asynchronously
 func (p *Producer) PublishJSONAsync(topic string, v interface{}, doneChan chan *nsq.ProducerTransaction, args ...interface{}) error {
-	body, err := EncJson(v)
+	body, err := EncJSON(v)
 	if err != nil {
 		return err
 	}
@@ -22,7 +22,7 @@ func (p *Producer) PublishJSONAsync(topic string, v interface{}, doneChan chan *
 
 // PublishJSON - sends message to nsq  topic in json format
 func (p *Producer) PublishJSON(topic string, v interface{}) error {
-	body, err := EncJson(v)
+	body, err := EncJSON(v)
 	if err != nil {
 		return err
 	}

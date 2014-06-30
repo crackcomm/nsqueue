@@ -14,12 +14,12 @@ func Publish(topic string, body []byte) error {
 
 // PublishJSONAsync - sends message to nsq  topic in json format asynchronously
 func PublishJSONAsync(topic string, v interface{}, doneChan chan *nsq.ProducerTransaction, args ...interface{}) error {
-	return DefaultProducer.PublishJsonAsync(topic, v, doneChan, args...)
+	return DefaultProducer.PublishJSONAsync(topic, v, doneChan, args...)
 }
 
 // PublishJSON - sends message to nsq  topic in json format
 func PublishJSON(topic string, v interface{}) error {
-	return DefaultProducer.PublishJson(topic, v)
+	return DefaultProducer.PublishJSON(topic, v)
 }
 
 // PublishAsync - sends a message to nsq  topic asynchronously
