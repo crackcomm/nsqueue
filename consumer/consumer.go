@@ -10,22 +10,22 @@ type topicChan struct {
 	channel string
 }
 
-// Function that handles incoming message.
+// Handler - Function that handles incoming message.
 type Handler func(*Message)
 
-// NSQ messages consumer.
+// Consumer - NSQ messages consumer.
 type Consumer struct {
 	handlers map[topicChan]*queue
 }
 
-// Creates a new consumer structure
+// NewConsumer - Creates a new consumer structure
 func NewConsumer() *Consumer {
 	return &Consumer{
 		handlers: make(map[topicChan]*queue),
 	}
 }
 
-// Registers topic/channel handler for messages
+// Register - Registers topic/channel handler for messages
 // This function creates a new nsq.Reader
 func (c *Consumer) Register(topic, channel string, maxInFlight int, handler Handler) error {
 	tch := topicChan{topic, channel}
@@ -45,7 +45,7 @@ func (c *Consumer) Register(topic, channel string, maxInFlight int, handler Hand
 	return nil
 }
 
-// Connects all readers to NSQ lookupd
+// ConnectLookupd - Connects all readers to NSQ lookupd
 func (c *Consumer) ConnectLookupd(addr string) error {
 	for _, q := range c.handlers {
 		if err := q.ConnectToNSQLookupd(addr); err != nil {
@@ -55,7 +55,7 @@ func (c *Consumer) ConnectLookupd(addr string) error {
 	return nil
 }
 
-// Connects all readers to NSQ lookupd instances
+// ConnectLookupdList - Connects all readers to NSQ lookupd instances
 func (c *Consumer) ConnectLookupdList(addrs []string) error {
 	for _, addr := range addrs {
 		if err := c.ConnectLookupd(addr); err != nil {
@@ -65,7 +65,7 @@ func (c *Consumer) ConnectLookupdList(addrs []string) error {
 	return nil
 }
 
-// Connects all readers to NSQ
+// Connect - Connects all readers to NSQ
 func (c *Consumer) Connect(addr string) error {
 	for _, q := range c.handlers {
 		if err := q.ConnectToNSQD(addr); err != nil {
@@ -75,7 +75,7 @@ func (c *Consumer) Connect(addr string) error {
 	return nil
 }
 
-// Connects all readers to NSQ instances
+// ConnectList - Connects all readers to NSQ instances
 func (c *Consumer) ConnectList(addrs []string) error {
 	for _, addr := range addrs {
 		if err := c.Connect(addr); err != nil {
@@ -85,10 +85,10 @@ func (c *Consumer) ConnectList(addrs []string) error {
 	return nil
 }
 
-// Just waits
+// Start - Just waits
 func (c *Consumer) Start(debug bool) {
 	if debug {
-		for i, _ := range c.handlers {
+		for i := range c.handlers {
 			log.Printf("Handler: topic=%s channel=%s\n", i.topic, i.channel)
 		}
 	}

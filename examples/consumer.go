@@ -12,6 +12,7 @@ var (
 	maxInFlight = flag.Int("max-in-flight", 30, "Maximum amount of messages in flight to consume")
 )
 
+//HandleTest -
 func HandleTest(msg *consumer.Message) {
 	t := &time.Time{}
 	t.UnmarshalBinary(msg.Body)

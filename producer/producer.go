@@ -11,7 +11,8 @@ type Producer struct {
 	*nsq.Producer
 }
 
-func (p *Producer) PublishJsonAsync(topic string, v interface{}, doneChan chan *nsq.ProducerTransaction, args ...interface{}) error {
+// PublishJSONAsync - sends message to nsq  topic in json format asynchronously
+func (p *Producer) PublishJSONAsync(topic string, v interface{}, doneChan chan *nsq.ProducerTransaction, args ...interface{}) error {
 	body, err := EncJson(v)
 	if err != nil {
 		return err
@@ -19,7 +20,8 @@ func (p *Producer) PublishJsonAsync(topic string, v interface{}, doneChan chan *
 	return p.PublishAsync(topic, body, doneChan, args...)
 }
 
-func (p *Producer) PublishJson(topic string, v interface{}) error {
+// PublishJSON - sends message to nsq  topic in json format
+func (p *Producer) PublishJSON(topic string, v interface{}) error {
 	body, err := EncJson(v)
 	if err != nil {
 		return err
@@ -33,7 +35,8 @@ func (p *Producer) Connect(addr string) {
 	p.Producer, _ = nsq.NewProducer(addr, config)
 }
 
-func EncJson(v interface{}) ([]byte, error) {
+// EncJSON - 
+func EncJSON(v interface{}) ([]byte, error) {
 	buf := new(bytes.Buffer)
 	enc := json.NewEncoder(buf)
 	err := enc.Encode(v)
