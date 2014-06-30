@@ -7,7 +7,6 @@ import (
 )
 
 type Message struct {
-	responseChannel chan *nsq.FinishedMessage
 	*nsq.Message
 }
 
@@ -33,5 +32,9 @@ func (m *Message) Fail() {
 
 // Finish processing message
 func (m *Message) Finish(success bool) {
-	m.responseChannel <- &nsq.FinishedMessage{m.Message.Id, 0, success}
+	if success {
+		m.Message.Finish();
+	} else {
+		m.Message.Requeue(-1)
+	}
 }

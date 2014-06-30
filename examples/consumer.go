@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/crackcomm/nsqueue/consumer"
+	"github.com/zvelo/nsqueue/consumer"
 	"time"
 )
 

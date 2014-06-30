@@ -29,15 +29,18 @@ func NewConsumer() *Consumer {
 // This function creates a new nsq.Reader
 func (c *Consumer) Register(topic, channel string, maxInFlight int, handler Handler) error {
 	tch := topicChan{topic, channel}
-	// Create nsq reader
-	r, err := nsq.NewReader(topic, channel)
+
+	config := nsq.NewConfig()
+	config.Set("verbose", true)
+	config.Set("max_in_flight", maxInFlight)
+
+	r, err := nsq.NewConsumer(topic, channel, config)
 	if err != nil {
 		return err
 	}
-	r.SetMaxInFlight(maxInFlight)
 
 	q := &queue{handler, r}
-	r.AddAsyncHandler(q)
+	r.SetHandler(q)
 	c.handlers[tch] = q
 	return nil
 }
@@ -45,7 +48,7 @@ func (c *Consumer) Register(topic, channel string, maxInFlight int, handler Hand
 // Connects all readers to NSQ lookupd
 func (c *Consumer) ConnectLookupd(addr string) error {
 	for _, q := range c.handlers {
-		if err := q.ConnectToLookupd(addr); err != nil {
+		if err := q.ConnectToNSQLookupd(addr); err != nil {
 			return err
 		}
 	}
@@ -65,7 +68,7 @@ func (c *Consumer) ConnectLookupdList(addrs []string) error {
 // Connects all readers to NSQ
 func (c *Consumer) Connect(addr string) error {
 	for _, q := range c.handlers {
-		if err := q.ConnectToNSQ(addr); err != nil {
+		if err := q.ConnectToNSQD(addr); err != nil {
 			return err
 		}
 	}
@@ -85,8 +88,8 @@ func (c *Consumer) ConnectList(addrs []string) error {
 // Just waits
 func (c *Consumer) Start(debug bool) {
 	if debug {
-		for i, q := range c.handlers {
-			log.Printf("Handler: topic=%s channel=%s max=%d\n", i.topic, i.channel, q.MaxInFlight())
+		for i, _ := range c.handlers {
+			log.Printf("Handler: topic=%s channel=%s\n", i.topic, i.channel)
 		}
 	}
 

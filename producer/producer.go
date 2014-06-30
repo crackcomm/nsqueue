@@ -6,11 +6,12 @@ import (
 	"github.com/bitly/go-nsq"
 )
 
+// Producer inherets the nsq Producer object
 type Producer struct {
-	*nsq.Writer
+	*nsq.Producer
 }
 
-func (p *Producer) PublishJsonAsync(topic string, v interface{}, doneChan chan *nsq.WriterTransaction, args ...interface{}) error {
+func (p *Producer) PublishJsonAsync(topic string, v interface{}, doneChan chan *nsq.ProducerTransaction, args ...interface{}) error {
 	body, err := EncJson(v)
 	if err != nil {
 		return err
@@ -18,16 +19,18 @@ func (p *Producer) PublishJsonAsync(topic string, v interface{}, doneChan chan *
 	return p.PublishAsync(topic, body, doneChan, args...)
 }
 
-func (p *Producer) PublishJson(topic string, v interface{}) (int32, []byte, error) {
+func (p *Producer) PublishJson(topic string, v interface{}) error {
 	body, err := EncJson(v)
 	if err != nil {
-		return 0, []byte{}, err
+		return err
 	}
 	return p.Publish(topic, body)
 }
 
+// Connect method initialize the connection to nsq
 func (p *Producer) Connect(addr string) {
-	p.Writer = nsq.NewWriter(addr)
+	config := nsq.NewConfig()
+	p.Producer, _ = nsq.NewProducer(addr, config)
 }
 
 func EncJson(v interface{}) ([]byte, error) {
