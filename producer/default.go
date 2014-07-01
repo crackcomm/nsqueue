@@ -41,3 +41,4 @@ func MultiPublishAsync(topic string, body [][]byte, doneChan chan *nsq.ProducerT
 func Connect(addr string) {
 	DefaultProducer.Connect(addr)
 }
+
