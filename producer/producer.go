@@ -30,9 +30,10 @@ func (p *Producer) PublishJSON(topic string, v interface{}) error {
 }
 
 // Connect method initialize the connection to nsq
-func (p *Producer) Connect(addr string) {
+func (p *Producer) Connect(addr string) error {
 	config := nsq.NewConfig()
 	p.Producer, _ = nsq.NewProducer(addr, config)
+	return nil
 }
 
 // EncJSON - 
