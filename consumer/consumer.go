@@ -86,7 +86,7 @@ func (c *Consumer) ConnectList(addrs []string) error {
 }
 
 // Start - Just waits
-func (c *Consumer) Start(debug bool) {
+func (c *Consumer) Start(debug bool) error {
 	if debug {
 		for i := range c.handlers {
 			log.Printf("Handler: topic=%s channel=%s\n", i.topic, i.channel)
@@ -94,4 +94,6 @@ func (c *Consumer) Start(debug bool) {
 	}
 
 	<-make(chan bool)
+
+	return nil
 }

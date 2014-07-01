@@ -18,25 +18,29 @@ func (m *Message) ReadJSON(v interface{}) error {
 }
 
 // GiveUp - Finish message with success state because message never will be possible to process
-func (m *Message) GiveUp() {
+func (m *Message) GiveUp() error {
 	m.Finish(true)
+	return nil
 }
 
 // Success - Finish message as successfully proccessed
-func (m *Message) Success() {
+func (m *Message) Success() error {
 	m.Finish(true)
+	return nil
 }
 
 // Fail - Mark message as failed to process
-func (m *Message) Fail() {
+func (m *Message) Fail() error {
 	m.Finish(false)
+	return nil
 }
 
 // Finish - Finish processing message
-func (m *Message) Finish(success bool) {
+func (m *Message) Finish(success bool) error {
 	if success {
 		m.Message.Finish();
 	} else {
 		m.Message.Requeue(-1)
 	}
+	return nil
 }
