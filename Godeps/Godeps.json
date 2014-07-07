@@ -1,0 +1,38 @@
+{
+	"ImportPath": "github.com/zvelo/nsqueue",
+	"GoVersion": "go1.2.2",
+	"Packages": [
+		"./..."
+	],
+	"Deps": [
+		{
+			"ImportPath": "code.google.com/p/snappy-go/snappy",
+			"Comment": "null-15",
+			"Rev": "12e4b4183793ac4b061921e7980845e750679fd0"
+		},
+		{
+			"ImportPath": "github.com/bitly/go-nsq",
+			"Comment": "v0.3.7-63-g1775aec",
+			"Rev": "1775aec7963d38214c7f50ea7845e6da184dbab6"
+		},
+		{
+			"ImportPath": "github.com/bitly/go-simplejson",
+			"Comment": "v0.4.3-23-g2abbab7",
+			"Rev": "2abbab791406d7c6c4c0a3e11db0b0f9f41ef90d"
+		},
+		{
+			"ImportPath": "github.com/jacobsa/oglematchers",
+			"Rev": "4fc24f97b5b74022c2a3f4ca7eed57ca29083d3e"
+		},
+		{
+			"ImportPath": "github.com/mreiferson/go-snappystream",
+			"Comment": "v0.1.1",
+			"Rev": "97c96e6648e99c2ce4fe7d169aa3f7368204e04d"
+		},
+		{
+			"ImportPath": "github.com/smartystreets/goconvey/convey",
+			"Comment": "1.5.0-235-gfba167a",
+			"Rev": "fba167a7179763b87c6ba32ed427a949c5434354"
+		}
+	]
+}

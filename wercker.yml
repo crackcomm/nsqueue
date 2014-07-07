@@ -1,0 +1,44 @@
+box: wercker/golang
+
+# Build definition
+build:
+    steps:
+        # Sets the go workspace and places you package
+        # at the right place in the workspace tree
+        - setup-go-workspace
+
+        # Gets the dependencies
+        - script:
+            name: go get
+            code: |
+                cd $WERCKER_SOURCE_DIR
+                go version
+
+                # go get should not be used
+                # godep should provide all dependencies
+                # missing dependencies are a legitimate build failure
+                # go get -t ./...
+                go get -v github.com/tools/godep
+
+                # these are needed for coverage testing
+                go get -v github.com/axw/gocov/gocov
+                go get -v github.com/joshuarubin/goveralls
+
+        # Build the project
+        - script:
+            name: go build
+            code: |
+                make build
+
+        # Test the project
+        - script:
+            name: go test
+            code: |
+                export GIT_BRANCH=$WERCKER_GIT_BRANCH
+                make coverage
+                goveralls -v -coverprofile=acc.out -service wercker -repotoken $COVERALLS_REPO_TOKEN
+
+    after-steps:
+      - hipchat-notify:
+          token: $HIPCHAT_TOKEN
+          room-id: $HIPCHAT_ROOM_ID
