@@ -6,32 +6,41 @@ import (
 	"github.com/bitly/go-nsq"
 )
 
+// Message - Inherent nsq
 type Message struct {
-	responseChannel chan *nsq.FinishedMessage
 	*nsq.Message
 }
 
-func (m *Message) ReadJson(v interface{}) error {
+// ReadJSON - 
+func (m *Message) ReadJSON(v interface{}) error {
 	dec := json.NewDecoder(bytes.NewReader(m.Body))
 	return dec.Decode(v)
 }
 
-// Finish message with success state because message never will be possible to process
-func (m *Message) GiveUp() {
+// GiveUp - Finish message with success state because message never will be possible to process
+func (m *Message) GiveUp() error {
 	m.Finish(true)
+	return nil
 }
 
-// Finish message as successfully proccessed
-func (m *Message) Success() {
+// Success - Finish message as successfully proccessed
+func (m *Message) Success() error {
 	m.Finish(true)
+	return nil
 }
 
-// Mark message as failed to process
-func (m *Message) Fail() {
+// Fail - Mark message as failed to process
+func (m *Message) Fail() error {
 	m.Finish(false)
+	return nil
 }
 
-// Finish processing message
-func (m *Message) Finish(success bool) {
-	m.responseChannel <- &nsq.FinishedMessage{m.Message.Id, 0, success}
+// Finish - Finish processing message
+func (m *Message) Finish(success bool) error {
+	if success {
+		m.Message.Finish();
+	} else {
+		m.Message.Requeue(-1)
+	}
+	return nil
 }

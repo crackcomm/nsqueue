@@ -1,0 +1,13 @@
+{
+    "github": {
+        "repo": "nsqueue"
+    },
+    "pivotal_tracker": {
+        "project": {
+            "id": 1049888
+        }
+    },
+    "hipchat": {
+        "room": "1049888"
+    }
+}
