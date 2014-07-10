@@ -11,5 +11,5 @@ type queue struct {
 
 func (q *queue) HandleMessage(message *nsq.Message) error {
 	q.fnc(&Message{message})
-	return nil;
+	return nil
 }

@@ -36,7 +36,7 @@ func (p *Producer) Connect(addr string) error {
 	return nil
 }
 
-// EncJSON - 
+// EncJSON -
 func EncJSON(v interface{}) ([]byte, error) {
 	buf := new(bytes.Buffer)
 	enc := json.NewEncoder(buf)

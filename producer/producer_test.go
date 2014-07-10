@@ -1,8 +1,8 @@
 package producer
 
 import (
-	"testing"
 	. "github.com/smartystreets/goconvey/convey"
+	"testing"
 )
 
 var (
@@ -33,7 +33,6 @@ func TestPublishJSON(t *testing.T) {
 	})
 }
 
-
 func TestConnect(t *testing.T) {
 	Convey("Given nsqd address to connect to", t, func() {
 		Convey("It should not produce any error", func() {
@@ -53,5 +52,3 @@ func TestEncJSON(t *testing.T) {
 		})
 	})
 }
-
-

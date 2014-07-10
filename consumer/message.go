@@ -11,7 +11,7 @@ type Message struct {
 	*nsq.Message
 }
 
-// ReadJSON - 
+// ReadJSON -
 func (m *Message) ReadJSON(v interface{}) error {
 	dec := json.NewDecoder(bytes.NewReader(m.Body))
 	return dec.Decode(v)
@@ -38,7 +38,7 @@ func (m *Message) Fail() error {
 // Finish - Finish processing message
 func (m *Message) Finish(success bool) error {
 	if success {
-		m.Message.Finish();
+		m.Message.Finish()
 	} else {
 		m.Message.Requeue(-1)
 	}

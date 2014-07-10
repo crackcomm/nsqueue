@@ -1,19 +1,19 @@
 package consumer
 
 import (
-	"testing"
 	. "github.com/smartystreets/goconvey/convey"
+	"testing"
 )
 
 var (
-	topic = "consumerTestTopic"
-	channel = "consumerTestChannel"
+	topic       = "consumerTestTopic"
+	channel     = "consumerTestChannel"
 	maxInFlight = 3
 
-	lookupdHTTPAddr = "127.0.0.1:4161"
+	lookupdHTTPAddr  = "127.0.0.1:4161"
 	lookupdHTTPAddrs = []string{"127.0.0.2:4161"}
 
-	destNsqdTCPAddr = "127.0.0.1:4150"
+	destNsqdTCPAddr  = "127.0.0.1:4150"
 	destNsqdTCPAddrs = []string{"127.0.0.2:4150"}
 
 	debug = true
@@ -92,13 +92,13 @@ func TestConnectList(t *testing.T) {
 		Convey("It should not produce any error", func() {
 			err := ConnectList(destNsqdTCPAddrs)
 			So(err, ShouldEqual, nil)
-		}) 
+		})
 	})
 
 	Convey("Given list of wrong nsqd address", t, func() {
 		Convey("It should produce an error", func() {
 			err := ConnectList(destNsqdTCPAddrs)
 			So(err, ShouldNotEqual, nil)
-		}) 
+		})
 	})
 }
