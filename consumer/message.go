@@ -1,7 +1,6 @@
 package consumer
 
 import (
-	"bytes"
 	"encoding/json"
 	"github.com/bitly/go-nsq"
 )
@@ -11,10 +10,9 @@ type Message struct {
 	*nsq.Message
 }
 
-// ReadJSON -
+// ReadJSON - Unmarshals JSON message body to interface.
 func (m *Message) ReadJSON(v interface{}) error {
-	dec := json.NewDecoder(bytes.NewReader(m.Body))
-	return dec.Decode(v)
+	return json.Unmarshal(m.Body, v)
 }
 
 // GiveUp - Finish message with success state because message never will be possible to process
