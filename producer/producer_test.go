@@ -41,14 +41,3 @@ func TestConnect(t *testing.T) {
 		})
 	})
 }
-
-func TestEncJSON(t *testing.T) {
-	Convey("Given a json message to encode", t, func() {
-		Convey("It should not produce any error", func() {
-			Connect(destNsqdTCPAddr)
-			var message interface{} = "testMessage"
-			_, err := EncJSON(message)
-			So(err, ShouldEqual, nil)
-		})
-	})
-}
