@@ -40,7 +40,7 @@ func (c *Consumer) Register(topic, channel string, maxInFlight int, handler Hand
 	}
 
 	q := &queue{handler, r}
-	r.SetHandler(q)
+	r.AddHandler(q)
 	c.handlers[tch] = q
 	return nil
 }
