@@ -4,32 +4,41 @@ import (
 	"github.com/bitly/go-nsq"
 )
 
+// Instantiates the Producer object
 var DefaultProducer = new(Producer)
 
-func Publish(topic string, body []byte) (int32, []byte, error) {
+// Publish - sends message to nsq  topic
+func Publish(topic string, body []byte) error {
 	return DefaultProducer.Publish(topic, body)
 }
 
-func PublishJsonAsync(topic string, v interface{}, doneChan chan *nsq.WriterTransaction, args ...interface{}) error {
-	return DefaultProducer.PublishJsonAsync(topic, v, doneChan, args...)
+// PublishJSONAsync - sends message to nsq  topic in json format asynchronously
+func PublishJSONAsync(topic string, v interface{}, doneChan chan *nsq.ProducerTransaction, args ...interface{}) error {
+	return DefaultProducer.PublishJSONAsync(topic, v, doneChan, args...)
 }
 
-func PublishJson(topic string, v interface{}) (int32, []byte, error) {
-	return DefaultProducer.PublishJson(topic, v)
+// PublishJSON - sends message to nsq  topic in json format
+func PublishJSON(topic string, v interface{}) error {
+	return DefaultProducer.PublishJSON(topic, v)
 }
 
-func PublishAsync(topic string, body []byte, doneChan chan *nsq.WriterTransaction, args ...interface{}) error {
+// PublishAsync - sends a message to nsq  topic asynchronously
+func PublishAsync(topic string, body []byte, doneChan chan *nsq.ProducerTransaction, args ...interface{}) error {
 	return DefaultProducer.PublishAsync(topic, body, doneChan, args...)
 }
 
-func MultiPublish(topic string, body [][]byte) (int32, []byte, error) {
+// MultiPublish - sends multiple message to to nsq  topic
+func MultiPublish(topic string, body [][]byte) error {
 	return DefaultProducer.MultiPublish(topic, body)
 }
 
-func MultiPublishAsync(topic string, body [][]byte, doneChan chan *nsq.WriterTransaction, args ...interface{}) error {
+// MultiPublishAsync - sends multiple message to nsq  topic asynchronously
+func MultiPublishAsync(topic string, body [][]byte, doneChan chan *nsq.ProducerTransaction, args ...interface{}) error {
 	return DefaultProducer.MultiPublishAsync(topic, body, doneChan, args...)
 }
 
-func Connect(addr string) {
+// Connect method initialize the connection to nsq
+func Connect(addr string) error {
 	DefaultProducer.Connect(addr)
+	return nil
 }

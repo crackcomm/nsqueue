@@ -6,9 +6,10 @@ import (
 
 type queue struct {
 	fnc Handler
-	*nsq.Reader
+	*nsq.Consumer
 }
 
-func (q *queue) HandleMessage(message *nsq.Message, responseChannel chan *nsq.FinishedMessage) {
-	go q.fnc(&Message{responseChannel, message})
+func (q *queue) HandleMessage(message *nsq.Message) error {
+	q.fnc(&Message{message})
+	return nil
 }
