@@ -1,7 +1,6 @@
 package producer
 
 import (
-	"bytes"
 	"encoding/json"
 	"github.com/bitly/go-nsq"
 )
@@ -13,7 +12,7 @@ type Producer struct {
 
 // PublishJSONAsync - sends message to nsq  topic in json format asynchronously
 func (p *Producer) PublishJSONAsync(topic string, v interface{}, doneChan chan *nsq.ProducerTransaction, args ...interface{}) error {
-	body, err := EncJSON(v)
+	body, err := json.Marshal(v)
 	if err != nil {
 		return err
 	}
@@ -22,7 +21,7 @@ func (p *Producer) PublishJSONAsync(topic string, v interface{}, doneChan chan *
 
 // PublishJSON - sends message to nsq  topic in json format
 func (p *Producer) PublishJSON(topic string, v interface{}) error {
-	body, err := EncJSON(v)
+	body, err := json.Marshal(v)
 	if err != nil {
 		return err
 	}
@@ -34,12 +33,4 @@ func (p *Producer) Connect(addr string) (err error) {
 	config := nsq.NewConfig()
 	p.Producer, err = nsq.NewProducer(addr, config)
 	return
-}
-
-// EncJSON -
-func EncJSON(v interface{}) ([]byte, error) {
-	buf := new(bytes.Buffer)
-	enc := json.NewEncoder(buf)
-	err := enc.Encode(v)
-	return buf.Bytes(), err
 }
