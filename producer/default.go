@@ -39,6 +39,5 @@ func MultiPublishAsync(topic string, body [][]byte, doneChan chan *nsq.ProducerT
 
 // Connect method initialize the connection to nsq
 func Connect(addr string) error {
-	DefaultProducer.Connect(addr)
-	return nil
+	return DefaultProducer.Connect(addr)
 }
