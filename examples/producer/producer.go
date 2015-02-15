@@ -16,7 +16,7 @@ func main() {
 	flag.Parse()
 	producer.Connect(*nsqdAddr)
 
-	for _ = range time.NewTicker(100 * time.Millisecond).C {
+	for range time.NewTicker(100 * time.Millisecond).C {
 		fmt.Println("Ping...")
 		for i := 0; i < *amount; i++ {
 			body, _ := time.Now().MarshalBinary()
