@@ -2,6 +2,7 @@ package producer
 
 import (
 	"encoding/json"
+
 	"github.com/bitly/go-nsq"
 )
 
@@ -30,7 +31,11 @@ func (p *Producer) PublishJSON(topic string, v interface{}) error {
 
 // Connect method initialize the connection to nsq
 func (p *Producer) Connect(addr string) (err error) {
-	config := nsq.NewConfig()
+	return p.ConnectConfig(addr, nsq.NewConfig())
+}
+
+// ConnectConfig method initialize the connection to nsq with config.
+func (p *Producer) ConnectConfig(addr string, config *nsq.Config) (err error) {
 	p.Producer, err = nsq.NewProducer(addr, config)
 	return
 }

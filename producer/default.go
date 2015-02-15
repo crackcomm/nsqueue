@@ -41,3 +41,8 @@ func MultiPublishAsync(topic string, body [][]byte, doneChan chan *nsq.ProducerT
 func Connect(addr string) error {
 	return DefaultProducer.Connect(addr)
 }
+
+// ConnectConfig method initialize the connection to nsq with config
+func ConnectConfig(addr string, config *nsq.Config) error {
+	return DefaultProducer.ConnectConfig(addr, config)
+}
