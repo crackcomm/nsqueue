@@ -1,17 +1,15 @@
 package consumer
 
 import (
-	"github.com/bitly/go-nsq"
 	"log"
+
+	"github.com/bitly/go-nsq"
 )
 
 type topicChan struct {
 	topic   string
 	channel string
 }
-
-// Handler - Function that handles incoming message.
-type Handler func(*Message)
 
 // Consumer - NSQ messages consumer.
 type Consumer struct {
