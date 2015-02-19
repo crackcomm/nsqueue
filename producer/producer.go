@@ -11,6 +11,17 @@ type Producer struct {
 	*nsq.Producer
 }
 
+// Connect method initialize the connection to nsq
+func (p *Producer) Connect(addr string) (err error) {
+	return p.ConnectConfig(addr, nsq.NewConfig())
+}
+
+// ConnectConfig method initialize the connection to nsq with config.
+func (p *Producer) ConnectConfig(addr string, config *nsq.Config) (err error) {
+	p.Producer, err = nsq.NewProducer(addr, config)
+	return
+}
+
 // PublishJSONAsync - sends message to nsq  topic in json format asynchronously
 func (p *Producer) PublishJSONAsync(topic string, v interface{}, doneChan chan *nsq.ProducerTransaction, args ...interface{}) error {
 	body, err := json.Marshal(v)
@@ -27,15 +38,4 @@ func (p *Producer) PublishJSON(topic string, v interface{}) error {
 		return err
 	}
 	return p.Publish(topic, body)
-}
-
-// Connect method initialize the connection to nsq
-func (p *Producer) Connect(addr string) (err error) {
-	return p.ConnectConfig(addr, nsq.NewConfig())
-}
-
-// ConnectConfig method initialize the connection to nsq with config.
-func (p *Producer) ConnectConfig(addr string, config *nsq.Config) (err error) {
-	p.Producer, err = nsq.NewProducer(addr, config)
-	return
 }

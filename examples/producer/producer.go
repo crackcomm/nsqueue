@@ -3,8 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/crackcomm/nsqueue/producer"
 	"time"
+
+	"github.com/crackcomm/nsqueue/producer"
 )
 
 var (
@@ -16,7 +17,7 @@ func main() {
 	flag.Parse()
 	producer.Connect(*nsqdAddr)
 
-	for range time.NewTicker(100 * time.Millisecond).C {
+	for _ = range time.Tick(100 * time.Millisecond) {
 		fmt.Println("Ping...")
 		for i := 0; i < *amount; i++ {
 			body, _ := time.Now().MarshalBinary()

@@ -3,8 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/crackcomm/nsqueue/consumer"
 	"time"
+
+	"github.com/crackcomm/nsqueue/consumer"
 )
 
 var (
