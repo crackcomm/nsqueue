@@ -38,7 +38,7 @@ func (c *Consumer) Register(topic, channel string, maxInFlight int, handler Hand
 	}
 
 	q := &queue{handler, r}
-	r.AddHandler(q)
+	r.AddConcurrentHandlers(q, maxInFlight)
 	c.handlers[tch] = q
 	return nil
 }
