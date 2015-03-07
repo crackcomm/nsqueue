@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/bitly/go-nsq"
+	"github.com/crackcomm/nsqueue/nsqlog"
 )
 
 type topicChan struct {
@@ -13,11 +14,14 @@ type topicChan struct {
 
 // Consumer - NSQ messages consumer.
 type Consumer struct {
+	Logger   *log.Logger
+	LogLevel *nsq.LogLevel
+
 	handlers map[topicChan]*queue
 }
 
-// NewConsumer - Creates a new consumer structure
-func NewConsumer() *Consumer {
+// New - Creates a new consumer structure
+func New() *Consumer {
 	return &Consumer{
 		handlers: make(map[topicChan]*queue),
 	}
@@ -36,6 +40,8 @@ func (c *Consumer) Register(topic, channel string, maxInFlight int, handler Hand
 	if err != nil {
 		return err
 	}
+
+	r.SetLogger(c.logger(), c.loglevel())
 
 	q := &queue{handler, r}
 	r.AddConcurrentHandlers(q, maxInFlight)
@@ -94,4 +100,17 @@ func (c *Consumer) Start(debug bool) error {
 	<-make(chan bool)
 
 	return nil
+}
+func (c *Consumer) logger() *log.Logger {
+	if c.Logger == nil {
+		return nsqlog.Logger
+	}
+	return c.Logger
+}
+
+func (c *Consumer) loglevel() nsq.LogLevel {
+	if c.LogLevel == nil {
+		return nsqlog.LogLevel
+	}
+	return *c.LogLevel
 }

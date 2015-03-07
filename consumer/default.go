@@ -1,7 +1,11 @@
 package consumer
 
 // Shortcuts for apps using only one consumer
-var DefaultConsumer = NewConsumer()
+var DefaultConsumer *Consumer
+
+func init() {
+	DefaultConsumer = New()
+}
 
 // Connect - Look for Consumer.Connect() (on default consumer)
 func Connect(addr string) error {

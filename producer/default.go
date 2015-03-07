@@ -5,7 +5,11 @@ import (
 )
 
 // Instantiates the Producer object
-var DefaultProducer = new(Producer)
+var DefaultProducer *Producer
+
+func init() {
+	DefaultProducer = New()
+}
 
 // Publish - sends message to nsq  topic
 func Publish(topic string, body []byte) error {
