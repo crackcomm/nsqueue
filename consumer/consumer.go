@@ -16,6 +16,7 @@ type topicChan struct {
 type Consumer struct {
 	Logger   *log.Logger
 	LogLevel *nsq.LogLevel
+	Config   *nsq.Config
 
 	handlers map[topicChan]*queue
 }
@@ -32,9 +33,14 @@ func New() *Consumer {
 func (c *Consumer) Register(topic, channel string, maxInFlight int, handler Handler) error {
 	tch := topicChan{topic, channel}
 
-	config := nsq.NewConfig()
-	config.Set("verbose", true)
-	config.Set("max_in_flight", maxInFlight)
+	var config *nsq.Config
+	if c.Config == nil {
+		config = nsq.NewConfig()
+		config.Set("verbose", true)
+		config.Set("max_in_flight", maxInFlight)
+	} else {
+		config = c.Config
+	}
 
 	r, err := nsq.NewConsumer(topic, channel, config)
 	if err != nil {
@@ -96,11 +102,10 @@ func (c *Consumer) Start(debug bool) error {
 			log.Printf("Handler: topic=%s channel=%s\n", i.topic, i.channel)
 		}
 	}
-
 	<-make(chan bool)
-
 	return nil
 }
+
 func (c *Consumer) logger() *log.Logger {
 	if c.Logger == nil {
 		return nsqlog.Logger
