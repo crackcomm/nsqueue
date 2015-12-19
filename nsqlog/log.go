@@ -12,7 +12,7 @@ import (
 var Logger *log.Logger
 
 // LogLevel - Default consumer LogLevel.
-var LogLevel = nsq.LogLevelDebug
+var LogLevel = nsq.LogLevelError
 
 // SetOutput - Changes Logger to new logger with defined output.
 func SetOutput(output io.Writer) {
