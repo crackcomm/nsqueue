@@ -106,6 +106,13 @@ func (c *Consumer) Start(debug bool) error {
 	return nil
 }
 
+// Stop - Gracefully closes all consumers.
+func (c *Consumer) Stop() {
+	for _, h := range c.handlers {
+		h.Stop()
+	}
+}
+
 func (c *Consumer) logger() *log.Logger {
 	if c.Logger == nil {
 		return nsqlog.Logger
