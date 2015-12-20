@@ -4,11 +4,25 @@ import (
 	"encoding/json"
 
 	"github.com/bitly/go-nsq"
+	"golang.org/x/net/context"
 )
 
 // Message - Inherent nsq
 type Message struct {
 	*nsq.Message
+}
+
+var msgkey = "nsqmsg"
+
+// WithMessage - Returns nsq message from context.
+func WithMessage(ctx context.Context, msg *Message) context.Context {
+	return context.WithValue(ctx, msgkey, msg)
+}
+
+// MessageFromContext - Returns nsq message from context.
+func MessageFromContext(ctx context.Context) (*Message, bool) {
+	value, ok := ctx.Value(msgkey).(*Message)
+	return value, ok
 }
 
 // GiveUp - Finish message with success state because message never will be possible to process
