@@ -6,5 +6,5 @@ Library designed to simplify creating [nsq](https://github.com/bitly/nsq) Consum
 usage
 =====
 
-* [nsq consumer](https://godoc.org/github.com/crackcomm/nsqueue/consumer) 
+* [nsq consumer](https://godoc.org/github.com/crackcomm/nsqueue/consumer)
 * [nsq producer](https://godoc.org/github.com/crackcomm/nsqueue/producer)

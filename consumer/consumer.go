@@ -15,7 +15,7 @@ type topicChan struct {
 // Consumer - NSQ messages consumer.
 type Consumer struct {
 	Logger   *log.Logger
-	LogLevel *nsq.LogLevel
+	LogLevel nsq.LogLevel
 	Config   *nsq.Config
 
 	handlers map[topicChan]*queue
@@ -24,6 +24,8 @@ type Consumer struct {
 // New - Creates a new consumer structure
 func New() *Consumer {
 	return &Consumer{
+		Logger:   nsqlog.Logger,
+		LogLevel: nsqlog.LogLevel,
 		handlers: make(map[topicChan]*queue),
 	}
 }
@@ -47,7 +49,7 @@ func (c *Consumer) Register(topic, channel string, maxInFlight int, handler Hand
 		return err
 	}
 
-	r.SetLogger(c.logger(), c.loglevel())
+	r.SetLogger(c.Logger, c.LogLevel)
 
 	q := &queue{handler, r}
 	r.AddConcurrentHandlers(q, maxInFlight)
@@ -55,41 +57,25 @@ func (c *Consumer) Register(topic, channel string, maxInFlight int, handler Hand
 	return nil
 }
 
-// ConnectLookupd - Connects all readers to NSQ lookupd
-func (c *Consumer) ConnectLookupd(addr string) error {
-	for _, q := range c.handlers {
-		if err := q.ConnectToNSQLookupd(addr); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-// ConnectLookupdList - Connects all readers to NSQ lookupd instances
-func (c *Consumer) ConnectLookupdList(addrs []string) error {
-	for _, addr := range addrs {
-		if err := c.ConnectLookupd(addr); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 // Connect - Connects all readers to NSQ
-func (c *Consumer) Connect(addr string) error {
+func (c *Consumer) Connect(addrs ...string) error {
 	for _, q := range c.handlers {
-		if err := q.ConnectToNSQD(addr); err != nil {
-			return err
+		for _, addr := range addrs {
+			if err := q.ConnectToNSQD(addr); err != nil {
+				return err
+			}
 		}
 	}
 	return nil
 }
 
-// ConnectList - Connects all readers to NSQ instances
-func (c *Consumer) ConnectList(addrs []string) error {
-	for _, addr := range addrs {
-		if err := c.Connect(addr); err != nil {
-			return err
+// ConnectLookupd - Connects all readers to NSQ lookupd
+func (c *Consumer) ConnectLookupd(addrs ...string) error {
+	for _, q := range c.handlers {
+		for _, addr := range addrs {
+			if err := q.ConnectToNSQLookupd(addr); err != nil {
+				return err
+			}
 		}
 	}
 	return nil
@@ -111,18 +97,4 @@ func (c *Consumer) Stop() {
 	for _, h := range c.handlers {
 		h.Stop()
 	}
-}
-
-func (c *Consumer) logger() *log.Logger {
-	if c.Logger == nil {
-		return nsqlog.Logger
-	}
-	return c.Logger
-}
-
-func (c *Consumer) loglevel() nsq.LogLevel {
-	if c.LogLevel == nil {
-		return nsqlog.LogLevel
-	}
-	return *c.LogLevel
 }

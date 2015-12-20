@@ -13,7 +13,7 @@ var (
 	maxInFlight = flag.Int("max-in-flight", 30, "Maximum amount of messages in flight to consume")
 )
 
-func HandleTest(msg *consumer.Message) {
+func handleTest(msg *consumer.Message) {
 	t := &time.Time{}
 	t.UnmarshalBinary(msg.Body)
 	fmt.Printf("Consume latency: %s\n", time.Since(*t))
@@ -22,7 +22,7 @@ func HandleTest(msg *consumer.Message) {
 
 func main() {
 	flag.Parse()
-	consumer.Register("latency-test", "consume", *maxInFlight, HandleTest)
+	consumer.Register("latency-test", "consume", *maxInFlight, handleTest)
 	consumer.Connect(*nsqdAddr)
 	consumer.Start(true)
 }

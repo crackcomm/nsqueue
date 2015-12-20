@@ -1,6 +1,6 @@
 package consumer
 
-// Shortcuts for apps using only one consumer
+// DefaultConsumer - Shortcuts for apps using only one consumer.
 var DefaultConsumer *Consumer
 
 func init() {
@@ -8,23 +8,13 @@ func init() {
 }
 
 // Connect - Look for Consumer.Connect() (on default consumer)
-func Connect(addr string) error {
-	return DefaultConsumer.Connect(addr)
-}
-
-// ConnectList - Look for Consumer.ConnectList() (on default consumer)
-func ConnectList(addrs []string) error {
-	return DefaultConsumer.ConnectList(addrs)
+func Connect(addrs ...string) error {
+	return DefaultConsumer.Connect(addrs...)
 }
 
 // ConnectLookupd - Look for Consumer.ConnectLookupd() (on default consumer)
-func ConnectLookupd(addr string) error {
-	return DefaultConsumer.ConnectLookupd(addr)
-}
-
-// ConnectLookupdList - Look for Consumer.ConnectLookupdList() (on default consumer)
-func ConnectLookupdList(addrs []string) error {
-	return DefaultConsumer.ConnectLookupdList(addrs)
+func ConnectLookupd(addrs ...string) error {
+	return DefaultConsumer.ConnectLookupd(addrs...)
 }
 
 // Register - Look for Consumer.Register() (on default consumer)

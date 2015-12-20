@@ -11,17 +11,20 @@ import (
 // Producer inherets the nsq Producer object
 type Producer struct {
 	Logger   *log.Logger
-	LogLevel *nsq.LogLevel
+	LogLevel nsq.LogLevel
 
 	*nsq.Producer
 }
 
 // New - Creates a new Producer.
 func New() *Producer {
-	return new(Producer)
+	return &Producer{
+		Logger:   nsqlog.Logger,
+		LogLevel: nsqlog.LogLevel,
+	}
 }
 
-// Connect method initialize the connection to nsq
+// Connect - Connects prodocuer to nsq instance.
 func (p *Producer) Connect(addr string) (err error) {
 	return p.ConnectConfig(addr, nsq.NewConfig())
 }
@@ -29,7 +32,7 @@ func (p *Producer) Connect(addr string) (err error) {
 // ConnectConfig method initialize the connection to nsq with config.
 func (p *Producer) ConnectConfig(addr string, config *nsq.Config) (err error) {
 	p.Producer, err = nsq.NewProducer(addr, config)
-	p.Producer.SetLogger(p.logger(), p.loglevel())
+	p.Producer.SetLogger(p.Logger, p.LogLevel)
 	return
 }
 
@@ -49,18 +52,4 @@ func (p *Producer) PublishJSON(topic string, v interface{}) error {
 		return err
 	}
 	return p.Publish(topic, body)
-}
-
-func (p *Producer) logger() *log.Logger {
-	if p.Logger == nil {
-		return nsqlog.Logger
-	}
-	return p.Logger
-}
-
-func (p *Producer) loglevel() nsq.LogLevel {
-	if p.LogLevel == nil {
-		return nsqlog.LogLevel
-	}
-	return *p.LogLevel
 }
