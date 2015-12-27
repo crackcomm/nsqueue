@@ -1,10 +1,10 @@
 package producer
 
 import (
-	"github.com/bitly/go-nsq"
+	"github.com/nsqio/go-nsq"
 )
 
-// Instantiates the Producer object
+// DefaultProducer - Default nsq producer.
 var DefaultProducer *Producer
 
 func init() {

@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/bitly/go-nsq"
+	"github.com/nsqio/go-nsq"
 )
 
 // Logger - Default consumer Logger.

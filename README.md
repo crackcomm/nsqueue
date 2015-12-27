@@ -1,7 +1,7 @@
 nsqueue
 =======
 
-Library designed to simplify creating [nsq](https://github.com/bitly/nsq) Consumer and Publisher, built on top of [go-nsq](https://github.com/bitly/go-nsq).
+Library designed to simplify creating [nsq](https://nsq.io) Consumer and Publisher, built on top of [go-nsq](https://github.com/nsqio/go-nsq).
 
 usage
 =====

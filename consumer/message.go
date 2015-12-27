@@ -3,7 +3,7 @@ package consumer
 import (
 	"encoding/json"
 
-	"github.com/bitly/go-nsq"
+	"github.com/nsqio/go-nsq"
 	"golang.org/x/net/context"
 )
 

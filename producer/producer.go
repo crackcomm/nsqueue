@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"log"
 
-	"github.com/bitly/go-nsq"
 	"github.com/crackcomm/nsqueue/nsqlog"
+	"github.com/nsqio/go-nsq"
 )
 
 // Producer inherets the nsq Producer object
