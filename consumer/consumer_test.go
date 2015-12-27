@@ -56,22 +56,6 @@ func TestConnectLookupd(t *testing.T) {
 	})
 }
 
-func TestConnectLookupdList(t *testing.T) {
-	Convey("Given list of lookupd address", t, func() {
-		Convey("It should not produce any error", func() {
-			err := ConnectLookupdList(lookupdHTTPAddrs)
-			So(err, ShouldEqual, nil)
-		})
-	})
-
-	Convey("Given list of wrong lookupd address", t, func() {
-		Convey("It should not produce an error", func() {
-			err := ConnectLookupdList([]string{"127.0.0.2"})
-			So(err, ShouldNotEqual, nil)
-		})
-	})
-}
-
 func TestConnect(t *testing.T) {
 	Convey("Given nsqd address", t, func() {
 		Convey("It should not produce any error", func() {
@@ -83,22 +67,6 @@ func TestConnect(t *testing.T) {
 	Convey("Given wrong nsqd address", t, func() {
 		Convey("It should produce an error", func() {
 			err := Connect("127.0.0.1")
-			So(err, ShouldNotEqual, nil)
-		})
-	})
-}
-
-func TestConnectList(t *testing.T) {
-	Convey("Given list of nsqd address", t, func() {
-		Convey("It should not produce any error", func() {
-			err := ConnectList(destNsqdTCPAddrs)
-			So(err, ShouldEqual, nil)
-		})
-	})
-
-	Convey("Given list of wrong nsqd address", t, func() {
-		Convey("It should produce an error", func() {
-			err := ConnectList(destNsqdTCPAddrs)
 			So(err, ShouldNotEqual, nil)
 		})
 	})
