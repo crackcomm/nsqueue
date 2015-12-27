@@ -21,6 +21,9 @@ type Consumer struct {
 	handlers map[topicChan]*queue
 }
 
+// DefaultVerbose - Default nsq "verbose" option.
+var DefaultVerbose = false
+
 // New - Creates a new consumer structure
 func New() *Consumer {
 	return &Consumer{
@@ -38,7 +41,7 @@ func (c *Consumer) Register(topic, channel string, maxInFlight int, handler Hand
 	var config *nsq.Config
 	if c.Config == nil {
 		config = nsq.NewConfig()
-		config.Set("verbose", true)
+		config.Set("verbose", DefaultVerbose)
 		config.Set("max_in_flight", maxInFlight)
 	} else {
 		config = c.Config
