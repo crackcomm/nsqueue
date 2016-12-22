@@ -1,4 +1,14 @@
 
+machine:
+  environment:
+    GODIST: "go1.7.4.linux-amd64.tar.gz"
+  post:
+    - test -e $GODIST || curl -o $GODIST https://storage.googleapis.com/golang/$GODIST
+    - sudo rm -rf /usr/local/go
+    - sudo tar -C /usr/local -xzf $GODIST
+  services:
+    - docker
+
 dependencies:
   override:
     - go get -t -d -v ./...
