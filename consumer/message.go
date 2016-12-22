@@ -1,10 +1,10 @@
 package consumer
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/nsqio/go-nsq"
-	"golang.org/x/net/context"
 )
 
 // Message - Inherent nsq
