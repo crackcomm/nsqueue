@@ -50,3 +50,8 @@ func Connect(addr string) error {
 func ConnectConfig(addr string, config *nsq.Config) error {
 	return DefaultProducer.ConnectConfig(addr, config)
 }
+
+// Stop initiates a graceful stop of the Producer (permanent)
+func Stop() {
+	DefaultProducer.Stop()
+}

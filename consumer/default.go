@@ -26,3 +26,8 @@ func Register(topic, channel string, maxInFlight int, fnc Handler) error {
 func Start(debug bool) {
 	DefaultConsumer.Start(debug)
 }
+
+// Stop - Look for Consumer.Stop() (on default consumer)
+func Stop() {
+	DefaultConsumer.Stop()
+}
